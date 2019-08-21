@@ -17,7 +17,7 @@ use Faker\Generator as Faker;
 */
 
 $factory->define(User::class, function (Faker $faker) {
-    $status = ['student','family','students_family'];
+    $status = ['student','family'];
     return [
         'name' => $faker->name,
         'email' => $faker->unique()->safeEmail,
