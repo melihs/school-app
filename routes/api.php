@@ -16,3 +16,7 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::group(['prefix'=>'users'],function (){
+    Route::apiResource('students','UserController')->except('index','create','edit');
+});
