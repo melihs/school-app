@@ -12,6 +12,7 @@ class UserController extends Controller
 
     public function __construct(UserRepositoryInterface $userRepository)
     {
+        $user = auth()->check();
         $this->userRepository = $userRepository;
     }
 
