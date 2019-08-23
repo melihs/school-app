@@ -15,9 +15,10 @@ use Illuminate\Http\Request;
 Route::post('/login','Api\AuthController@login')->name('login');
 Route::post('/register','Api\AuthController@register')->name('register');
 
-Route::group(['middleware' => 'auth.jwt'], function () {
+Route::group(['middleware' => 'jwt'], function () {
+    Route::get('user','Api\AuthController@user')->name('user');
     Route::group(['prefix'=>'users'],function (){
-        Route::apiResource('students','UserController')->except('index','create','edit');
+        Route::apiResource('families','UserController')->except('index','create','edit');
     });
 });
 
