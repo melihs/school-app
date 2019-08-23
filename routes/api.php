@@ -12,7 +12,8 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::post('/login','Api\AuthController@login');
+Route::post('/login','Api\AuthController@login')->name('login');
+Route::post('/register','Api\AuthController@register')->name('register');
 
 Route::group(['middleware' => 'auth.jwt'], function () {
     Route::group(['prefix'=>'users'],function (){
