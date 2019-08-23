@@ -10,6 +10,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 class User extends Authenticatable implements JWTSubject
 {
     use Notifiable;
+    const FAMILY = 'family';
 
     /**
      * The attributes that are mass assignable.

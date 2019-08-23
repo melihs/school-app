@@ -2,23 +2,38 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\User;
 use Illuminate\Http\Request;
 use App\Http\Requests\LoginRequest;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RegisterRequest;
 
 class AuthController extends Controller
 {
-
+    /**
+     * @param RegisterRequest $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function register(RegisterRequest $request)
     {
         $data =$request->all();
-        dd($data);
+        $filter = User::where('code',$data["code"])->first();
+
+        if(empty($filter)) {
+            return response()->json(['error' => 'not found student'],404);
+        }
+        $data['password'] = Hash::make($data["password"]);
+        $data['status'] = User::FAMILY;
+
+        return response()->json([ 'data' => User::create($data) ],201);
+
     }
 
     /**
-     * @param Request $request
+     * @param LoginRequest $request
      *
      * @return \Illuminate\Http\JsonResponse
      */
@@ -27,17 +42,10 @@ class AuthController extends Controller
         $credentials = $request->only('email','password');
 
         if(!$token = auth()->attempt($credentials)) {
-            return response()->json([
-                'error' => 'Unauthorized',
-                'message' => 'Invalid Email or Password',
-            ], 401);
+            return response()->json(['error' => 'Unauthorized'],401);
         }
 
-        return response()->json([
-            'success' => true,
-            'token' => $token,
-            'status' => 200
-        ]);
+        return response()->json([ 'token' => $token ],200);
     }
 
 }
