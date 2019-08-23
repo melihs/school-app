@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RegisterRequest;
+use App\Notifications\RegisterAccountNotification;
 
 class AuthController extends Controller
 {
@@ -27,8 +28,12 @@ class AuthController extends Controller
         }
         $data['password'] = Hash::make($data["password"]);
         $data['status'] = User::FAMILY;
+        $result = User::create($data);
+        User::where('email',$data['email'])
+            ->first()
+            ->notify(new RegisterAccountNotification());
 
-        return response()->json([ 'data' => User::create($data) ],201);
+        return response()->json([ 'data' => $result ],201);
 
     }
 
