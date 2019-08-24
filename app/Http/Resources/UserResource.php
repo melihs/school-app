@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\User;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class UserResource extends JsonResource
@@ -15,13 +16,18 @@ class UserResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id' => $this->id,
-            'name' => $this->name,
-            'email' => $this->email,
-            'status' => $this->status,
-            'code' => $this->code,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            'student' => [
+                'id' => $this->id,
+                'name' => $this->name,
+                'email' => $this->email,
+                'status' => $this->status,
+                'code' => $this->code,
+                'links' => [
+                    'family' =>$this->when(User::where('status','family')
+                        ->where('code',$this->code)
+                        ->first(),route('users.family',$this->code)) // todo: buradaki sorguya bakılacak
+                ]
+            ]
         ];
     }
 }

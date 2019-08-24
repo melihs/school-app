@@ -2,35 +2,55 @@
 
 
 namespace App\Repositories;
-use App\Repositories\Interfaces\UserRepositoryInterface;
+
 use App\User;
+use App\Http\Resources\UserResource;
+use App\Repositories\Interfaces\UserRepositoryInterface;
 
 class UserRepository implements UserRepositoryInterface
 {
-    public function getDetailList(User $user)
+    /**
+     * @return mixed
+     */
+    public function index()
     {
+        $students = User::where('status','student')->get();
 
-    }
-
-    public function store($request)
-    {
-
+        return $students;
     }
 
     /**
-     * @param $id
+     * @param $code
      *
      * @return mixed
      */
-    public function getByUser($id)
+    public function family($code)
     {
-        return User::where('id',$id)->get()->first();
+        $family = User::where('status','family')
+            ->where('code',$code)
+            ->first();
+
+        return $family;
+    }
+
+    /**
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function show()
+    {
+        return auth()->user();
+    }
+
+    public function getStudent()
+    {
+
     }
 
     public function update(User $user,$request)
     {
 
     }
+
     public function destroy(User $user)
     {
 
