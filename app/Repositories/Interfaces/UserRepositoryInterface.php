@@ -9,7 +9,7 @@ interface UserRepositoryInterface
 {
     public function index();
     public function show();
-    public function family($code);
+    public function getParent($invite_code);
     public function update(User $user, $request);
     public function destroy(User $user);
 }

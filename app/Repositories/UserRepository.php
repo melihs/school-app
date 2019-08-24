@@ -24,13 +24,12 @@ class UserRepository implements UserRepositoryInterface
      *
      * @return mixed
      */
-    public function family($code)
+    public function getParent($invite_code)
     {
-        $family = User::where('status','family')
-            ->where('code',$code)
+        $parent = User::where('status','parent')
+            ->where('code',$invite_code)
             ->first();
-
-        return $family;
+        return $parent;
     }
 
     /**
@@ -39,11 +38,6 @@ class UserRepository implements UserRepositoryInterface
     public function show()
     {
         return auth()->user();
-    }
-
-    public function getStudent()
-    {
-
     }
 
     public function update(User $user,$request)

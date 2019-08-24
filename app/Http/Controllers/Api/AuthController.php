@@ -27,11 +27,16 @@ class AuthController extends Controller
             return response()->json(['error' => 'not found student'],404);
         }
         $data['password'] = Hash::make($data["password"]);
-        $data['status'] = User::FAMILY;
+        $data['status'] = User::PARENT;
         $result = User::create($data);
-        User::where('email',$data['email'])
-            ->first()
-            ->notify(new RegisterAccountNotification());
+        try {
+            User::where('email',$data['email'])
+                ->first()
+                ->notify(new RegisterAccountNotification());
+
+        }catch (\Exception $exception){
+            $exception->getMessage();
+        }
 
         return response()->json([ 'data' => $result ],201);
 
