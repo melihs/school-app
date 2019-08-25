@@ -9,6 +9,7 @@ use App\Student;
 use App\Events\NotificationSent;
 use App\Http\Requests\LoginRequest;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\RegisterRequest;
 use App\Notifications\RegisterAccountNotification;
 use App\Repositories\Interfaces\AuthRepositoryInterface;
@@ -58,6 +59,6 @@ class AuthRepository implements AuthRepositoryInterface
             return response()->json(['error' => 'Unauthorized'],401);
         }
 
-        return response()->json([ 'token' => $token ],200);
+        return $token;
     }
 }

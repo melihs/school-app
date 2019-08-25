@@ -40,7 +40,7 @@ class AuthController extends Controller
      */
     public function login(LoginRequest $request)
     {
-        return $this->authRepository->login($request);
+        return response()->json(['token' => $this->authRepository->login($request)],200);
     }
 
 }

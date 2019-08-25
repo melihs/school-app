@@ -22,31 +22,13 @@ class UserController extends Controller
 
     public function index()
     {
-//        return UserResource::collection($this->userRepository->getListParentAndStudents());
-        $st = Student::with('parent')->get();
-       return $st;
         return UserResource::collection($this->userRepository->index());
-    }
-
-    /**
-     * @param $code
-     *
-     * @return FamilyResource|\Illuminate\Http\JsonResponse
-     */
-    public function getParent($code)
-    {
-        $data = $this->userRepository->getParent($code);
-
-        if(!isset($data)) {
-            return response()->json(['error' => 'not found'],404);
-        }
-        return new ParentResource($data);
     }
 
     /**
      * @return UserResource
      */
-    public function me()
+    public function show()
     {
         return new UserResource($this->userRepository->show());
     }

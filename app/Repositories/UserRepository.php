@@ -3,6 +3,7 @@
 
 namespace App\Repositories;
 
+use App\Student;
 use App\User;
 use App\Http\Resources\UserResource;
 use App\Repositories\Interfaces\UserRepositoryInterface;
@@ -14,30 +15,20 @@ class UserRepository implements UserRepositoryInterface
      */
     public function index()
     {
-        $students = User::where('status','student')->get();
+        $students = Student::with('parent')->get();
 
         return $students;
     }
 
     /**
-     * @param $code
-     *
      * @return mixed
-     */
-    public function getParent($invite_code)
-    {
-        $parent = User::where('status','parent')
-            ->where('code',$invite_code)
-            ->first();
-        return $parent;
-    }
-
-    /**
-     * @return \Illuminate\Http\JsonResponse
      */
     public function show()
     {
-        return auth()->user();
+        $parent = User::find(auth()->user()->id);
+        $getRelateds = $parent->students->toArray();
+
+        return $parent;
     }
 
     public function update(User $user,$request)
