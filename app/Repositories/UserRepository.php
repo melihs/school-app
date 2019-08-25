@@ -3,8 +3,8 @@
 
 namespace App\Repositories;
 
-use App\Student;
 use App\User;
+use App\Student;
 use App\Http\Resources\UserResource;
 use App\Repositories\Interfaces\UserRepositoryInterface;
 

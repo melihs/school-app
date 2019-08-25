@@ -19,6 +19,7 @@ class StudentResource extends JsonResource
             'name' => $this->name,
             'email' => $this->email,
             'code' => $this->code,
+            'parent'=>new UserResource($this->whenLoaded('parent'))
         ];
     }
 }

@@ -17,7 +17,6 @@ Route::post('/login','AuthController@login')->name('login');
 Route::post('/register','AuthController@register')->name('register');
 
 Route::group(['middleware' => 'jwt'], function () {
-    Route::get('users/{invite_code}/parents','UserController@getParent')->name('users.getParent');
     Route::get('users/me','UserController@show')->name('users.show');
     Route::apiResource('users','UserController')->except('show','create','edit');
 });

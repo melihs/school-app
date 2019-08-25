@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Student;
-use App\User;
+
 use Illuminate\Http\Request;
 use App\Http\Resources\UserResource;
-use App\Http\Resources\ParentResource;
-use App\Http\Resources\UserCollection;
+use App\Http\Resources\StudentResource;
 use App\Repositories\Interfaces\UserRepositoryInterface;
 
 class UserController extends Controller
@@ -22,7 +20,7 @@ class UserController extends Controller
 
     public function index()
     {
-        return UserResource::collection($this->userRepository->index());
+        return StudentResource::collection($this->userRepository->index());
     }
 
     /**
