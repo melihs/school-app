@@ -1,45 +1,48 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+
+namespace App\Repositories;
+
 
 use App\User;
-use Illuminate\Http\Request;
+use App\Student;
+use App\Events\NotificationSent;
 use App\Http\Requests\LoginRequest;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\Controller;
 use App\Http\Requests\RegisterRequest;
 use App\Notifications\RegisterAccountNotification;
+use App\Repositories\Interfaces\AuthRepositoryInterface;
 
-class AuthController extends Controller
+class AuthRepository implements AuthRepositoryInterface
 {
-    /**
-     * @param RegisterRequest $request
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
     public function register(RegisterRequest $request)
     {
         $data =$request->all();
-        $filter = User::where('code',$data["code"])->first();
+        $filter = Student::where('code',$data["code"])->first();
 
-        if(empty($filter)) {
-            return response()->json(['error' => 'not found student'],404);
+        if(!isset($filter)) {
+            return null;
         }
+
         $data['password'] = Hash::make($data["password"]);
-        $data['status'] = User::PARENT;
+        $data['role'] = User::PARENT;
         $result = User::create($data);
+        $parent = User::where('email',$data['email'])->first();
+        event(new NotificationSent($parent));
+
         try {
             User::where('email',$data['email'])
                 ->first()
                 ->notify(new RegisterAccountNotification());
 
         }catch (\Exception $exception){
-            $exception->getMessage();
+            return response()->json([
+                'error' => 'email failed',
+                'message' => $exception->getMessage()
+            ],404);
         }
 
-        return response()->json([ 'data' => $result ],201);
-
+        return $parent;
     }
 
     /**
@@ -57,5 +60,4 @@ class AuthController extends Controller
 
         return response()->json([ 'token' => $token ],200);
     }
-
 }

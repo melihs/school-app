@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Student;
 use App\User;
 use Illuminate\Http\Request;
 use App\Http\Resources\UserResource;
@@ -13,15 +14,17 @@ class UserController extends Controller
 {
     private $userRepository;
 
-    public function __construct(UserRepositoryInterface $userRepository)
+    public function __construct(UserRepositoryInterface $user_repository)
     {
         $user = auth()->check();
-        $this->userRepository = $userRepository;
+        $this->userRepository = $user_repository;
     }
 
     public function index()
     {
 //        return UserResource::collection($this->userRepository->getListParentAndStudents());
+        $st = Student::with('parent')->get();
+       return $st;
         return UserResource::collection($this->userRepository->index());
     }
 

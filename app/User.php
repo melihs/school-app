@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Listeners\AddStudentByParent;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -18,7 +19,7 @@ class User extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $fillable = [
-        'name', 'email','status','code','password',
+        'name', 'email','code','password',
     ];
 
     /**
@@ -58,4 +59,17 @@ class User extends Authenticatable implements JWTSubject
     {
         return [];
     }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function students()
+    {
+       return $this->hasMany(Student::class);
+    }
+
+    protected $dispatchesEvents = [
+        'created' => AddStudentByParent::class,
+    ];
+
 }

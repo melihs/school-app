@@ -13,8 +13,8 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::post('/login','Api\AuthController@login')->name('login');
-Route::post('/register','Api\AuthController@register')->name('register');
+Route::post('/login','AuthController@login')->name('login');
+Route::post('/register','AuthController@register')->name('register');
 
 Route::group(['middleware' => 'jwt'], function () {
     Route::get('users/{invite_code}/parents','UserController@getParent')->name('users.getParent');
