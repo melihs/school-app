@@ -1,4 +1,4 @@
-# school app
+# school application restful api
 
 ## Libraries in the Project
 - tymon/jwt-auth@1.0.0: https://github.com/tymondesigns/jwt-auth
