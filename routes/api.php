@@ -18,6 +18,6 @@ Route::post('/register','AuthController@register')->name('register');
 
 Route::group(['middleware' => 'jwt'], function () {
     Route::get('users/me','UserController@show')->name('users.show');
-    Route::apiResource('users','UserController')->except('show','create','edit');
+    Route::apiResource('users','UserController')->except('show','create','edit','destroy');
 });
 

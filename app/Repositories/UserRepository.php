@@ -3,9 +3,13 @@
 
 namespace App\Repositories;
 
+
 use App\User;
 use App\Student;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use App\Http\Resources\UserResource;
+use Illuminate\Support\Facades\Validator;
 use App\Repositories\Interfaces\UserRepositoryInterface;
 
 class UserRepository implements UserRepositoryInterface
@@ -31,13 +35,55 @@ class UserRepository implements UserRepositoryInterface
         return $parent;
     }
 
-    public function update(User $user,$request)
+    /**
+     * @param Request $request
+     * @param $id
+     *
+     * @return mixed
+     */
+    public function update(Request $request, $id)
     {
+        $parent = User::find($id);
+        $request->validate(['name' =>'string|max:255|required']);
+        $parent->name = request('name');
+        $this->emailValidation($parent,$id);
+        $this->passwordValidate($parent);
+        $parent->save();
+
+        return $parent;
 
     }
 
-    public function destroy(User $user)
+    /**
+     * @param $user
+     * @param $id
+     *
+     * @return array|\Illuminate\Http\Request|string
+     */
+    public function emailValidation($user,$id)
     {
+        $getEmail = User::find($id)->email;
+        if ($getEmail !== request('email')) {
+            Validator::make((array) request('email'), ['email' =>'string|max:255|unique:users|email|required']);
+            $user->email = request('email');
 
+            return $user->email;
+        }
+    }
+
+    /**
+     * @param $user
+     *
+     * @return string
+     */
+    public function passwordValidate($user)
+    {
+        if (request('password'))
+        {
+            Validator::make((array) request('password'), ['password' =>'string|max:4|required' ]);
+            $user->password = Hash::make(request('password'));
+
+            return $user->password;
+        }
     }
 }
