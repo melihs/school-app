@@ -33,9 +33,8 @@ class AddStudentByParent
     {
         $getParentCode = $event->user->code;
         $student = Student::where('code',$getParentCode)->first();
-        $parentId = User::where('code',$student->code)->first()->value('id');
+        $parentId = User::where('code',$student->code)->value('id');
         $student->user_id = $parentId;
-
         try  {
             $student->save();
         }
